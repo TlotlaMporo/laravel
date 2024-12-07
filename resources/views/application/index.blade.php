@@ -4,21 +4,21 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Applications') }}
             </h2>
+ @can('institute')
+            <form method="POST" action="/control/{{Auth::user()->institute->id}}">
+        @csrf
+        @method("PATCH")
+        @if (isset($applications[1]) && is_countable($applications[1]) && count($applications[1]) > 0)
+            <x-primary-button class="bg-green-500" name="action" value="admission">
+                {{ (Auth::user()->institute->control->admissions !== 'open') ? 'Publish Admissions' : 'Published' }}
+            </x-primary-button>
+        @endif
+        <x-primary-button class="bg-green-500" name="action" value="application">
+            {{ (Auth::user()->institute->control->applications !== 'open') ? 'Open Applications' : 'Close Applications' }}
+        </x-primary-button>
+    </form>
+@endcan
 
-            @can('institute')
-                <form method="POST" action="/control/{{Auth::user()->institute->id}}">
-                    @csrf
-                    @method("PATCH")
-                    @if ((count($applications[1]) > 0))
-                        <x-primary-button class="bg-green-500" name="action" value="admission">
-                            {{ (Auth::user()->institute->control->admissions !== 'open') ? 'Publish Admissions' : 'Published' }}
-                        </x-primary-button>
-                    @endif
-                    <x-primary-button class="bg-green-500" name="action" value="application">
-                        {{ (Auth::user()->institute->control->applications !== 'open') ? 'Open Applications' : 'Close Applications' }}
-                    </x-primary-button>
-                </form>
-            @endcan
         </div>
     </x-slot>
 

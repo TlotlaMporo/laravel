@@ -1,0 +1,35 @@
+<?php
+
+// app/Http/Controllers/DashboardController.php
+namespace App\Http\Controllers;
+
+use App\Models\Course;
+use App\Models\Faculty;
+use Auth;
+use Illuminate\Http\Request;
+
+class DashboardController extends Controller
+{
+    public function institutionDashboard()
+    {
+        // Ensure that only institution users have access
+        if (Auth::user()?->role !== 'institute') {
+            return redirect('/dashboard');
+        }
+
+        // Fetch the authenticated user's institute
+        $institute = Auth::user()->institute;
+
+        // Fetch relevant data for the institution
+        $faculties = $institute->faculty;  
+        $courses = Course::whereIn('faculty_id', $faculties->pluck('id'))->get();  
+        $studentCount = $institute->students()->count();  
+
+        // Return the data to the view
+        return view('dashboard.institution', [
+            'faculties' => $faculties,
+            'courses' => $courses,
+            'studentCount' => $studentCount
+        ]);
+    }
+}

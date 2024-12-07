@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-app-layout> 
     <x-slot name="header">
         <div class="flex justify-between align-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -6,6 +6,16 @@
             </h2>
         </div>
     </x-slot>
+    
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-6">
@@ -15,59 +25,49 @@
                     @csrf
                     <div class="sm:flex gap-3 max-[640px]:block">
                         <div class="flex-1">
-                            
-                            <x-input-label for="passes" :value='__("Subject you passed($course->passed_subject must be included)")'/>
-                            @for ($i = 0; $i < $course->pass; $i++)
-                                   <div>
-                                        <div class="flex gap-2">
-                                            <div class="w-full">
-                                              <x-text-input :id="'label-' . $i" class="block mt-1 w-full" type="text" :name="'passed_subject_' . $i + 1"
-                                            :value='(count($passed) > $i) ? $passed[$i] : old("passed_subject_" . $i + 1)'
-                                            autofocus
-                                            required
-                                            :readonly="(count($passed) > $i)"
-                                            :placeholder='"Subject " . $i + 1'/>
-                                            <x-input-error :messages='$errors->get("passed_subject_" . $i + 1)' class="mt-2" />
-                                            </div>
+                            <!-- Passed Subjects: Maximum of 4 fields -->
+                            <x-input-label for="passes" :value='__("Subjects you passed (maximum 4)")'/>
+                            @for ($i = 0; $i < 4; $i++)
+                                <div>
+                                    <div class="flex gap-2">
                                         <div class="w-full">
-                                            <x-text-input :id="'value-' . $i" class="block mt-1 w-full" type="text" :name="'passed_grade_' . $i + 1"
-                                            :value="old('value-{$i}')" autofocus 
-                                            placeholder="Grade(A)"
-                                            required
-                                            />
-                                            <x-input-error :messages='$errors->get("passed_grade_" . $i + 1)' class="mt-2" />
+                                            <x-text-input :id="'passed-subject-' . $i" class="block mt-1 w-full" type="text" 
+                                                name="passed_subject[]" value="{{ old('passed_subject.' . $i) }}" 
+                                                placeholder="Subject you passed" />
+                                            <x-input-error :messages="$errors->get('passed_subject.' . $i)" class="mt-2" />
                                         </div>
-                                        </div>
-                                    </div> 
-                            @endfor
-                            <x-input-label class="mt-3" for="credits" :value='__("Subject you have credits")' />
-                            @for ($i = 0; $i < $course->credit_amount; $i++)
-                                   <div>
-                                        <div class="flex gap-2">
-                                            <div class="w-full">
-                                               <x-text-input :id="'label-' . $i" class="block mt-1 w-full" type="text" :name="'credit_subject_' . $i + 1"
-                                            :value="(count($credits) > $i) ? $credits[$i] : old('value-{$i}')"
-                                            :required
-                                            :readonly="(count($credits) > $i)"
-                                            :placeholder="'Subject ' . $i + 1"/>  
-                                            <x-input-error :messages="$errors->get('credit_subject_' . $i + 1)" class="mt-2" />
-                                            </div>
                                         <div class="w-full">
-                                           <x-text-input :id="'value-' . $i" class="block mt-1 w-full" type="text" :name="'credit_grade_' . $i + 1"
-                                            :value="old('value-{$i}')" autofocus 
-                                            placeholder="Grade(A)"
-                                            required
-                                            /> 
-                                            <x-input-error :messages="$errors->get('credit_grade_' . $i + 1)" class="mt-2" />
+                                            <x-text-input :id="'passed-grade-' . $i" class="block mt-1 w-full" type="text" 
+                                                name="passed_grade[]" value="{{ old('passed_grade.' . $i) }}" 
+                                                placeholder="Grade (A)" />
+                                            <x-input-error :messages="$errors->get('passed_grade.' . $i)" class="mt-2" />
                                         </div>
-
-                                        </div>
-
-                                        <x-input-error :messages="$errors->get('course_name')" class="mt-2" />
-                                    </div> 
+                                    </div>
+                                </div>
                             @endfor
-                            <x-input-error :messages='$errors->get("general")' class="mt-2" />
-                        </div>  
+
+                            <!-- Credit Subjects: Minimum of 3 fields -->
+                            <x-input-label class="mt-3" for="credits" :value='__("Subjects you have credits (minimum 3)")' />
+                            @for ($i = 0; $i < 3; $i++)
+                                <div>
+                                    <div class="flex gap-2">
+                                        <div class="w-full">
+                                            <x-text-input :id="'credit-subject-' . $i" class="block mt-1 w-full" type="text" 
+                                                name="credit_subject[]" value="{{ old('credit_subject.' . $i) }}" 
+                                                placeholder="Subject with credit" />
+                                            <x-input-error :messages="$errors->get('credit_subject.' . $i)" class="mt-2" />
+                                        </div>
+                                        <div class="w-full">
+                                            <x-text-input :id="'credit-grade-' . $i" class="block mt-1 w-full" type="text" 
+                                                name="credit_grade[]" value="{{ old('credit_grade.' . $i) }}" 
+                                                placeholder="Grade (A)" />
+                                            <x-input-error :messages="$errors->get('credit_grade.' . $i)" class="mt-2" />
+                                        </div>
+                                    </div>
+                                </div>
+                            @endfor
+
+                            <x-input-error :messages="$errors->get('general')" class="mt-2" />
                         </div>
                     </div>
                     <div>
@@ -80,5 +80,3 @@
         </div>
     </div>
 </x-app-layout>
-
-

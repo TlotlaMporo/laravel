@@ -1,6 +1,6 @@
-<x-app-layout x-data="{open:false}">
+<x-app-layout x-data="{open:false}"> 
     <x-slot name="header">
-        <div class="flex justify-between items-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-4 rounded-lg shadow-lg">
+        <div class="flex justify-between items-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 p-4 rounded-lg shadow-lg border-2 border-white outline outline-2 outline-white">
             <h2 class="font-extrabold text-2xl text-white tracking-wider">
                 {{ __('Institutes') }}
             </h2>
@@ -17,16 +17,16 @@
         </div>
 
         <!-- Main Content Area -->
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 relative z-10">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 relative z-10 border-2 border-white outline outline-2 outline-white rounded-lg">
             <h2 class="font-bold pb-5 text-2xl text-gray-100 tracking-wide">
                 Institutes List
             </h2>
             
             <!-- Institutes Grid -->
-            <div class="bg-gray-800/90 shadow-xl sm:rounded-lg p-8 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 text-white">
+            <div class="bg-gray-800/90 shadow-xl sm:rounded-lg p-8 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-6 text-white border-2 border-white outline outline-2 outline-white">
                 @foreach($institutes as $institute)
-                    <!-- Individual Institute Card -->
-                    <div class="bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-lg p-6 shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <!-- Individual Institute Card with Enhanced Border -->
+                    <div class="bg-gradient-to-br from-yellow-400 via-red-500 to-pink-500 rounded-lg p-6 shadow-lg hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-8 border-white outline outline-2 outline-white">
                         <h3 class="font-extrabold text-lg text-white mb-2">
                             Institute: {{ $institute->institute_name }}
                         </h3>
